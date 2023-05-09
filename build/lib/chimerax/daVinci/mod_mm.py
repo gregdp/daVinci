@@ -33,7 +33,10 @@ class ModMouseMode ( MouseMode ) :
         self._active = False
         self._handler = None
         self._last_frame_number = None
-        self._log = Logger('/Users/greg/Desktop/mod.log' if write_logs else None)
+
+        from os.path import exists
+        logf = Logger.logFile() if exists ( Logger.sigFile() ) else None
+        self._log = Logger( logf, "mod_mm" )
 
 
     def mouse_down(self, event):

@@ -11,8 +11,6 @@
 ##
 
 
-write_logs = True
-
 def register_mousemode(session):
     mm = session.ui.mouse_modes
     mm.add_mode ( PullAtomMode(session) )
@@ -36,7 +34,9 @@ class PullAtomMode (MouseMode) :
         self._arrow_model = None
         self._sim = None
 
-        self._log = Logger('/Users/greg/Desktop/mm.log' if write_logs else None)
+        from os.path import exists
+        logf = Logger.logFile() if exists ( Logger.sigFile() ) else None
+        self._log = Logger( logf, "mm" )
 
 
     def mouse_down(self, event):
@@ -196,21 +196,28 @@ class Puller3D:
 
 
 class Logger:
-    def __init__(self, filename = None):
+
+    def __init__(self, filename = None, label = ""):
         self.filename = filename
         self._log_file = None
-    def __call__(self, message, close = False):
+        self._label = label
+        self._log_counter = 0
+
+    @staticmethod
+    def logFile () :
+        return '/Users/greg/Desktop/dav.log'
+
+    @staticmethod
+    def sigFile () :
+        return "/Users/greg/Dropbox/_mol/x/daVinci/"
+
+    def __call__(self, message):
         if self.filename is None:
             return	# No logging
-        f = self._log_file
-        if f is None:
-            self._log_file = f = open(self.filename,'w')
-            self._log_counter = 0
-        f.write('%04d ' % self._log_counter)
+        self._log_file = f = open(self.filename,'a')
+        f.write ( '%s_%04d ' % (self._label, self._log_counter) )
         f.write(message)
         f.write("\n")
         f.flush()
         self._log_counter += 1
-        if close:
-            f.close()
-            self._log_file = None
+        f.close()

@@ -13,7 +13,6 @@
 
 
 openmm_forcefield_parameters = ['amber14-all.xml', 'amber14/tip3p.xml']
-write_logs = True
 
 from .sim_mm_pull import PullAtomMode, Logger
 
@@ -27,7 +26,10 @@ class MolSim :
                  cutoff = 10.0, temperature = 100.0,
                  steps = 50, tolerance = 0.001):
 
-        self._log = Logger('/Users/greg/Desktop/sim.log' if write_logs else None)
+        from os.path import exists
+        logf = Logger.logFile() if exists ( Logger.sigFile() ) else None
+        self._log = Logger( logf, "sim" )
+
         self._log ( "Initialized MolSim" )
         self._mol = atoms[0].structure
         self._atoms = atoms
