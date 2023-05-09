@@ -1,0 +1,77 @@
+<!--
+@Author: Greg Pintilie
+@Date:   14-Apr-2023
+@Email:  gregdp@gmail.com
+@Last modified by:   gregdp
+@Last modified time: 14-Apr-2023
+@License: Free for non-commercial use (see license.pdf)
+@Copyright: Copyright 2023 Grigore Pintilie
+-->
+
+<!--
+ChimeraX bundle names must start with "ChimeraX-"
+to avoid clashes with package names in pypi.python.org.
+When uploaded to the ChimeraX toolshed, the bundle
+will be displayed without the ChimeraX- prefix.
+-->
+
+<BundleInfo name="ChimeraX-daVinci"
+	    version="0.1" package="chimerax.daVinci"
+  	    minSessionVersion="1" maxSessionVersion="1">
+
+  <!-- Additional information about bundle source -->
+  <Author>Greg Pintilie</Author>
+  <Email>gregdp@gmail.com</Email>
+  <URL>https://en.wikipedia.org/wiki/Leonardo_da_Vinci</URL>
+
+  <!-- Synopsis is a one-line description
+       Description is a full multi-line description -->
+  <Synopsis>daVinci - design and simulate molecular systems</Synopsis>
+  <Description>
+    DaVinci is a tool for designing and simulating molecular systems.
+  </Description>
+
+  <!-- Categories is a list where this bundle should appear -->
+  <Categories>
+    <Category name="General"/>
+  </Categories>
+
+  <!-- Dependencies on other ChimeraX/Python packages -->
+  <Dependencies>
+    <Dependency name="ChimeraX-Core" version="~=1.1"/>
+  </Dependencies>
+
+	  <DataFiles>
+			<DataDir>icons</DataDir>
+			<DataDir>param</DataDir>
+		</DataFiles>
+
+<!--
+  <Providers manager="toolbar">
+		<Provider tab="daVinci" section="Mouse mode" mouse_mode="davinci pull"
+			name="pull atom" display_name="Pull atom" icon="davinci.png"
+			description="Right mouse pulls selected atom" />
+  </Providers>
+-->
+
+  <!-- Python and ChimeraX-specific classifiers
+       From https://pypi.python.org/pypi?%3Aaction=list_classifiers
+       Some Python classifiers are always inserted by the build process.
+       These include the Environment and Operating System classifiers
+       as well as:
+         Framework :: ChimeraX
+         Intended Audience :: Science/Research/Industry
+         Programming Language :: Python :: 3
+         Topic :: Scientific/Engineering :: Visualization
+         Topic :: Scientific/Engineering :: Chemistry
+         Topic :: Scientific/Engineering :: Bio-Informatics
+       The "ChimeraX :: Bundle" classifier is also supplied automatically.  -->
+  <Classifiers>
+    <!-- Development Status should be compatible with bundle version number -->
+    <PythonClassifier>Development Status :: 3 - Alpha</PythonClassifier>
+    <PythonClassifier>License :: Free for non-commercial use.</PythonClassifier>
+    <!-- ChimeraX classifiers describe supplied functionality -->
+    <ChimeraXClassifier>ChimeraX :: Command :: davinci :: General :: interactive design and simulation of molecular systems</ChimeraXClassifier>
+  </Classifiers>
+
+</BundleInfo>

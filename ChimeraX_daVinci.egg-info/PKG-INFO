@@ -1,0 +1,26 @@
+Metadata-Version: 2.1
+Name: ChimeraX-daVinci
+Version: 0.1
+Summary: daVinci - design and simulate molecular systems
+Home-page: https://en.wikipedia.org/wiki/Leonardo_da_Vinci
+Author: Greg Pintilie
+Author-email: gregdp@gmail.com
+Classifier: Framework :: ChimeraX
+Classifier: Intended Audience :: Science/Research
+Classifier: Programming Language :: Python :: 3
+Classifier: Topic :: Scientific/Engineering :: Visualization
+Classifier: Topic :: Scientific/Engineering :: Chemistry
+Classifier: Topic :: Scientific/Engineering :: Bio-Informatics
+Classifier: Development Status :: 3 - Alpha
+Classifier: License :: Free for non-commercial use.
+Classifier: Environment :: MacOS X :: Aqua
+Classifier: Environment :: Win32 (MS Windows)
+Classifier: Environment :: X11 Applications
+Classifier: Operating System :: MacOS :: MacOS X
+Classifier: Operating System :: Microsoft :: Windows :: Windows 10
+Classifier: Operating System :: POSIX :: Linux
+Classifier: ChimeraX :: Bundle :: General :: 1,1 :: chimerax.daVinci ::  :: 
+Classifier: ChimeraX :: Command :: davinci :: General :: interactive design and simulation of molecular systems
+Requires-Python: >=3.7
+
+DaVinci is a tool for designing and simulating molecular systems.
