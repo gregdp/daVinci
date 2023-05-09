@@ -401,7 +401,7 @@ class MolSim :
             # OpenMM requires the atoms to be sorted by residue number
             satoms = list(self._atoms)
             satoms.sort(key = lambda a: (a.residue.chain_id, a.residue.number))
-            from chimerax.atomic import Atoms, Bonds
+            from chimerax.atomic import Atoms, Bonds, Residues
             self.atoms = Atoms(satoms)
 
             atomsMap = {}
@@ -415,11 +415,21 @@ class MolSim :
 
             self.bonds = Bonds ( bonds )
 
+            resa = []
+            resm = {}
+            for at in self.atoms :
+                if not at.residue in resm :
+                    resm[at.residue] = 1
+                    resa.append ( at.residue )
+
+            self.residues = Residues ( resa )
+
             self._topology = openmm_topology(self.atoms, self.bonds)
             from openmm import app
             forcefield = app.ForceField(*self._forcefields)
     #        self._add_hydrogens(pdb, forcefield)
-            self._add_ligands_to_forcefield(self._mol.residues, forcefield)
+            #self._add_ligands_to_forcefield(self._mol.residues, forcefield)
+            self._add_ligands_to_forcefield(self.residues, forcefield)
             system, prob_res = self._create_system(forcefield)
 
             break
@@ -542,7 +552,7 @@ class MolSim :
                 forcefield.loadFile(pfile)
             except :
                 self._log ( " - not loaded/found" )
-                rnames_not_found2.append(rname)
+                rnames_not_found.append(rname)
                 continue
             log.info ( "Found params for %s" % rname )
 
@@ -687,9 +697,9 @@ class MolSim :
                     if t.startswith('(') and t.endswith('):') :
                         resName = t.replace('(','').replace('):','')
                 if resNum != None and resName != None :
-                    print ( " - problem res %d %s / %d res in %s" % (resNum, resName, len(self._mol.residues), self._mol.name) )
-                    if resNum-1 >= 0 and resNum-1 < len( self._mol.residues ) :
-                        res = self._mol.residues[resNum-1]
+                    print ( " - problem res %d %s / %d res in %s" % (resNum, resName, len(self.residues), self._mol.name) )
+                    if resNum-1 >= 0 and resNum-1 < len( self.residues ) :
+                        res = self.residues[resNum-1]
                         print ( " - found res number %d chain %s -- %s" % (res.number, res.chain_id, res.name) )
                         prob_res = res
             if "No template found for residue" in err2 :
@@ -704,9 +714,9 @@ class MolSim :
                     if t.startswith('(') and t.endswith(')') :
                         resName = t.replace('(','').replace(')','')
                 if resNum != None and resName != None :
-                    print ( " - problem res %d %s / %d res in %s" % (resNum, resName, len(self._mol.residues), self._mol.name) )
-                    if resNum-1 >= 0 and resNum-1 < len( self._mol.residues ) :
-                        res = self._mol.residues[resNum-1]
+                    print ( " - problem res %d %s / %d res in %s" % (resNum, resName, len(self.residues), self._mol.name) )
+                    if resNum-1 >= 0 and resNum-1 < len( self.residues ) :
+                        res = self.residues[resNum-1]
                         print ( " - found res number %d chain %s -- %s" % (res.number, res.chain_id, res.name) )
                         prob_res = res
 
