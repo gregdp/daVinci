@@ -22,7 +22,13 @@ def set_current_simm ( session, simm ) :
     session.daVinci_sim_manager = simm
 
 
-def daVinciCmd ( session, op, atoms=None, temp=50.0, inMap=None, resNum=None, add="" ) :
+def daVinciCmd ( session, op,
+                    # sim args
+                    atoms=None, temp=50.0, inMap=None,
+                    # show args
+                    res=None, resNum=None, d=None, # atoms
+                    # mod args
+                    add="" ) :
 
         # All command functions are invoked with ``session`` as its
         # first argument.  Useful session attributes include:
@@ -39,7 +45,7 @@ def daVinciCmd ( session, op, atoms=None, temp=50.0, inMap=None, resNum=None, ad
             modman = ModManager ( session )
             modman.AddRes ( add )
 
-        elif op == "sim" or op == "s" :
+        elif op == "sim" :
             DoSim ( session, atoms, temp, inMap )
 
         elif op == "minimize" or op == "m" or op == "min" :
@@ -50,7 +56,7 @@ def daVinciCmd ( session, op, atoms=None, temp=50.0, inMap=None, resNum=None, ad
             if simm != None :
                 simm.StopSim()
 
-        elif op == "set" or op == "s" :
+        elif op == "set" :
             print ( "cmd -- temp -- %.2f" % temp )
             simm = current_simm ( session )
             if simm != None :
@@ -65,10 +71,34 @@ def daVinciCmd ( session, op, atoms=None, temp=50.0, inMap=None, resNum=None, ad
             #from .other import *
             showLigands ( session )
 
+        elif op == "show" or op == "s" :
+            #atoms, dmap = GetAtomsAndMap ( session, atoms, inMap )
+            from .other import showAtoms
+            showAtoms ( session, atoms, res, d, MapFromId(session,inMap), only=False )
+
+        elif op == "showOnly" or op == "so" :
+            #atoms, dmap = GetAtomsAndMap ( session, atoms, inMap )
+            from .other import showAtoms
+            showAtoms ( session, atoms, res, d, MapFromId(session,inMap), only=True )
+
+
         else :
             session.logger.warning ( "cmd -- %s not known -- " % op )
 
 
+def MapFromId ( session, inMap ) :
+    dmap = None
+    print ( "looking for" )
+    print ( inMap )
+    if inMap != None :
+        #print ( inMap, len(inMap) )
+        for mod in session.models :
+            if mod.id == inMap :
+                print ( " - found map: %s" % mod.name )
+                print ( type(mod) )
+                if type(mod) == chimerax.map.volume.Volume :
+                    return mod
+    return None
 
 
 def GetAtomsAndMap ( session, atoms, inMap ) :
@@ -92,22 +122,11 @@ def GetAtomsAndMap ( session, atoms, inMap ) :
 
     dmap = None
     if inMap != None :
-        print ( inMap, len(inMap) )
-        for mod in session.models :
-            if mod.id == inMap :
-                print ( " - found map: %s" % mod.name )
-                print ( type(mod) )
-                if type(mod) == chimerax.map.volume.Volume :
-                    dmap = mod
-                else :
-                    session.logger.error ( "inMap parameter does not seem to specify a map"  )
-                    raise DaVinciParamError('inMap parameter does not seem to specify a map' )
-                    return
-
+        dmap = MapFromId ( session, inMap )
         if dmap == None :
-            sp = "" + inMap
-            session.logger.error ( "Could not find a map as specified %s" % sp  )
-            raise DaVinciParamError( "Could not find a map as specified %s" % sp )
+            session.logger.error ( "inMap parameter not found or not a map..."  )
+            raise DaVinciParamError('inMap parameter not found or not a map...' )
+            return
 
         print ( " -- in map: %s" % dmap.name )
 
@@ -167,11 +186,20 @@ def register_davinci_command ( name, synopsis, logger ) :
         from chimerax.atomic import AtomsArg
         desc = CmdDesc(required = [('op', StringArg)],
                        #keyword = [('to_atoms', AtomsArg), ('force_constant', FloatArg)],
-                       keyword = [('temp', FloatArg),
+                       keyword = [
+                                    # sim or min
+                                    ('temp', FloatArg),
                                     ('inMap', ModelIdArg),
                                     ('atoms', AtomsArg),
                                     ('resNum', IntArg),
-                                    ('add', StringArg)],
+                                    # mod op
+                                    ('add', StringArg),
+                                    # show op
+                                    # -- 'atoms'
+                                    # -- 'inMap'
+                                    ('res', AtomsArg),
+                                    ('d', FloatArg)
+                                    ],
                        required_arguments = ['op'],
                        synopsis=synopsis)
         register( name, desc, daVinciCmd, logger=logger)
