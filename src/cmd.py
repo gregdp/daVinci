@@ -98,17 +98,17 @@ def MapFromId ( session, inMap ) :
                 print ( type(mod) )
                 if type(mod) == chimerax.map.volume.Volume :
                     return mod
-    return None
+        raise Exception ( "inMap parameter did not find a map - check model id?" )
 
 
 def GetAtomsAndMap ( session, atoms, inMap ) :
 
     if atoms != None :
         if len(atoms) == 0 :
-            raise DaVinciParamError('Could not start sim, no atoms found as given' )
+            raise DaVinciParamError('no atoms specified - check model id?' )
             return
     else :
-        session.logger.info ( "No atoms specified - using first visible model in session..." )
+        session.logger.info ( "No atoms given - using all atoms in first visible model in session..." )
         for m in session.models :
             print ( " - %s -- " % m.name, type(m) )
             if m.visible and type(m) == chimerax.atomic.structure.AtomicStructure :

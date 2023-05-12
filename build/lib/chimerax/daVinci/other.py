@@ -60,6 +60,12 @@ def showAtoms ( session, atoms, resAtoms, distNear, inMap, only=True ) :
     #ress = session.selection.items ("residues")[0] # chimerax.atomic.molarray.Residues
     #print ( " - %d selected residues" % len(ress) )
 
+    if atoms != None and len(atoms) == 0 :
+        raise Exception ( "no atoms specified - check model id?" )
+
+    if resAtoms != None and len (resAtoms) == 0 :
+        raise Exception ( "no residues (res) specified - check model id?" )
+
     mol = atoms[0].structure if atoms != None else resAtoms[0].structure
 
     from chimerax.atomic import Atoms
