@@ -16,7 +16,7 @@ will be displayed without the ChimeraX- prefix.
 -->
 
 <BundleInfo name="ChimeraX-daVinci"
-	    version="0.2.2" package="chimerax.daVinci"
+	    version="0.2.3" package="chimerax.daVinci"
   	    minSessionVersion="1" maxSessionVersion="1">
 
   <!-- Additional information about bundle source -->

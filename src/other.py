@@ -61,10 +61,10 @@ def showAtoms ( session, atoms, resAtoms, distNear, inMap, only=True ) :
     #print ( " - %d selected residues" % len(ress) )
 
     if atoms != None and len(atoms) == 0 :
-        raise Exception ( "no atoms specified - check model id?" )
+        raise Exception ( "no atoms specified by atoms keyword - check model id?" )
 
     if resAtoms != None and len (resAtoms) == 0 :
-        raise Exception ( "no residues (res) specified - check model id?" )
+        raise Exception ( "no atoms specified by res keyword - check model id?" )
 
     mol = atoms[0].structure if atoms != None else resAtoms[0].structure
 
@@ -100,7 +100,8 @@ def showAtoms ( session, atoms, resAtoms, distNear, inMap, only=True ) :
                 at.draw_mode = at.STICK_STYLE
 
         for at in res.atoms :
-            zatoms[at] = 1
+            if at.element.number != 1 :
+                zatoms[at] = 1
 
     if only :
         for at in mol.atoms :
@@ -127,7 +128,8 @@ def showAtoms ( session, atoms, resAtoms, distNear, inMap, only=True ) :
             for at in res.atoms :
                 at.display = True
                 at.draw_mode = at.STICK_STYLE
-                zatoms[at] = 1
+                if at.element.number != 1 :
+                    zatoms[at] = 1
             if res.polymer_type == res.PT_PROTEIN or res.polymer_type == res.PT_NUCLEIC :
                 res.ribbon_display = False
 
@@ -142,7 +144,8 @@ def showAtoms ( session, atoms, resAtoms, distNear, inMap, only=True ) :
             for at in res.atoms :
                 at.display = True
                 at.draw_mode = at.STICK_STYLE
-                zatoms[at] = 1
+                if at.element.number != 1 :
+                    zatoms[at] = 1
             if res.polymer_type == res.PT_PROTEIN or res.polymer_type == res.PT_NUCLEIC :
                 res.ribbon_display = True
 
